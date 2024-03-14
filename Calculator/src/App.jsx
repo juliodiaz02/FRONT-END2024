@@ -1,9 +1,8 @@
 import { useState } from "react"
 import './App.css'
+import {buttons} from "./assets/buttons"
+import {ButtonsRow} from "./components/ButtonsRow"
 
-const numberButtonsClasses='btn btn-secondary w-100'
-const operatorButtonsClasses='btn btn-warning w-100'
-const specialButtonsClasses='btn btn-danger w-100'
 
 function App() {
 const [display,setDisplay] = useState({
@@ -45,13 +44,15 @@ const deleteLastCharacter = () =>{
 
 setDisplay({
   ...display,
-  value: display.value.slice(0,-1)
+  value: display.value.slice(0,-1),
+  hasPoint: (display.value.slice(-1) === '.') ? false : display.hasPoint
 })
 
 if(display.value.length===1){
   setDisplay({
     ...display,
-    value:'0'
+    value:'0',
+    hasPoint: false
   })
 }
 }
@@ -69,14 +70,24 @@ setDisplay({
 
 const calculate = () =>{
   if(!display.operatorHasBeenPressed){
-    return
-  }
+   return
+ }
+
+ let operator =display.operator === '%' ? '/ 100 *' :
+               display.operator === 'X' ? '*' : display.operator
+
+  let result = eval(`${display.previousValue} ${operator} ${display.value}`)
+
+  
+
+  result = result + ""
+
 
 setDisplay({
   ...display,
-  value: eval(`${display.previousValue} ${display.operator} ${display.value}`),
+  value: limit(result),
   operatorHasBeenPressed: false,
-  hasPoint: false,
+  hasPoint: result.incluides("."),
   previousValue: '0'
 })
 }
@@ -87,6 +98,13 @@ const resetDisplay=(value)=>{
     value : value,
     hasPoint: false
   })
+}
+const buttonsFunctions ={ 
+  calculate,
+  updateDisplay,
+  deleteLastCharacter,
+  setOperator,
+  resetDisplay
 }
 
   return (
@@ -101,61 +119,16 @@ const resetDisplay=(value)=>{
               <h2>{display.value}</h2>
               </td>
             </tr>
-
-            <tr>
-              <td> <button className={specialButtonsClasses} type="button" onClick={() => resetDisplay('0')}>C</button>
-              </td>
-              <td> <button className={specialButtonsClasses} type="button" onClick={deleteLastCharacter}>{'<'}</button>
-              </td>
-              <td> <button className={operatorButtonsClasses} type="button" onClick={() => setOperator('%')}>%</button>
-              </td>
-              <td> <button className={operatorButtonsClasses} type="button" onClick={() => setOperator('/')}>/</button>
-              </td>
-            </tr>
-
-            <tr>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('7')}>7</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('8')}>8</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('9')}>9</button>
-              </td>
-              <td> <button className={operatorButtonsClasses} type="button" onClick={() => setOperator('*')}>X</button>
-              </td>
-            </tr>
-
-            <tr>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('4')}>4</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('5')}>5</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('6')}>6</button>
-              </td>
-              <td> <button className={operatorButtonsClasses} type="button" onClick={() => setOperator('-')}>-</button>
-              </td>
-            </tr>
-
-            <tr>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('1')}>1</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('2')}>2</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('3')}>3</button>
-              </td>
-              <td> <button className={operatorButtonsClasses} type="button" onClick={() => setOperator('+')}>+</button>
-              </td>
-            </tr>
-
-            <tr>
-              <td className='text-center' colspan={2}>
-                <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('0')}>0</button>
-              </td>
-              <td> <button className={numberButtonsClasses} type="button" onClick={() => updateDisplay('.')}>.</button>
-              </td>
-              <td> <button className={specialButtonsClasses} type="button" onClick={calculate}>=</button>
-              </td>
-            </tr>
-
+            {
+              buttons.map((row, index) =>{
+                return (
+                  <ButtonsRow
+                  key={index}
+                  row={row}
+                  buttonsFunctions={buttonsFunctions} />
+                )
+              })
+            }
           </tbody>
         </table>
       </div>

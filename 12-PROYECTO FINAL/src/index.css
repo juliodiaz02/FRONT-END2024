@@ -158,12 +158,12 @@ header form {
 }
 
 .card-info h3 {
-	color: #333;
+	color: #040000;
 }
 
 .pokemon-id {
 	display: block;
-	color: #888888;
+	color: #080000;
 	margin-bottom: 25px;
 }
 
@@ -449,6 +449,8 @@ Styles of Pokemon Single Page
 	color: #000;
 }
 body{
+	background-repeat: repeat;
 	background-color: #000;
-	background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNbEse5UIDJ-j6FPGF1nNF0DbJcgBf1Ga9xsLNlvsOtaNO7J5tDyyPUi7EOdFInx04MTI&usqp=CAU);
+	
+	background-image: url(https://image.cdn2.seaart.ai/2023-06-17/35483828437061/24fc493c211cbf1c2dd0f13844f8622ea86cc189_high.webp);
 }

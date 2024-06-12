@@ -21,7 +21,7 @@ if(value === '.'){
   }
   setDisplay({
     ...display,
-    value: display.value + value,
+    value: limit (display.value + value),
     hasPoint: true
   })
   return
@@ -30,15 +30,24 @@ if(value === '.'){
   if(display.value === '0'){
     setDisplay({
       ...display,
-      value: value
+      value: limit (value)
     })
   } else {
   setDisplay({
     ...display,
-    value: display.value + value
+    value: limit(display.value + value),
   })
 }
 }
+
+const updateDisplay=()=>(
+  setDisplay({
+    ...display,
+    value:'0',
+    hasPoint:false
+  })
+
+)}
 
 const deleteLastCharacter = () =>{
 
@@ -73,8 +82,8 @@ const calculate = () =>{
    return
  }
 
- let operator =display.operator === '%' ? '/ 100 *' :
-               display.operator === 'X' ? '*' : display.operator
+ let operator =display.operator === '%' ? '/ 100 *' 
+               :display.operator === 'X' ? '*' : display.operator
 
   let result = eval(`${display.previousValue} ${operator} ${display.value}`)
 
